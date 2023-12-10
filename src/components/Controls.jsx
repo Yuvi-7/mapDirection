@@ -24,21 +24,22 @@ const Controls = () => {
 
   const handleChange = (e) => {
     const { value } = e.target;
-
     setSearch(value);
   };
 
   const fetchLocation = async () => {
-    setEncodedGeometry("");
-    const res = await apiCall(
-      "get",
-      `${OverPassAbsoluteURL}?data=[out:json];node["amenity"=${search.toLowerCase()}](around:${range},28.524620,77.186480);out;\n`
-    );
+    if (search) {
+      setEncodedGeometry("");
+      const res = await apiCall(
+        "get",
+        `${OverPassAbsoluteURL}?data=[out:json];node["amenity"=${search.toLowerCase()}](around:${range},28.524620,77.186480);out;\n`
+      );
 
-    if (res) {
-      setLocationData(res?.elements);
-      if (res?.elements?.length === 0) {
-        toast.warn("Increase Range or Search Amenity Only!");
+      if (res) {
+        setLocationData(res?.elements);
+        if (res?.elements?.length === 0) {
+          toast.warn("Increase Range or Search Amenity Only!");
+        }
       }
     }
   };
