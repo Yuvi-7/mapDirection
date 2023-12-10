@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Map from "./components/Map";
+import Controls from "./components/Controls";
+import LocationContextProvider from "./context/LocationContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LocationContextProvider>
+      <div className="App">
+        <div className="w-[90%] h-[90%] flex ">
+          <div className="w-[70%] border-r-2">
+            <Map />
+          </div>
+
+          <div className="w-[30%]">
+            <Controls />
+          </div>
+        </div>
+      </div>
+      <ToastContainer />
+    </LocationContextProvider>
   );
 }
 
