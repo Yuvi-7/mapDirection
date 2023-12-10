@@ -5,7 +5,6 @@ const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 3000;
-process.env.NODE_ENV
 
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
@@ -14,13 +13,13 @@ app.use(cors()); // Enable CORS for all routes
 app.use(express.static(path.join(__dirname, "build")));
 
 // Serve the React app for any route
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "", "/public/index.html"));
-});
-
 // app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "/public/index.html"));
+//   res.sendFile(path.join(__dirname, "", "/public/index.html"));
 // });
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "/public/index.html"));
+});
 
 // API endpoint to fetch data from TollGuru
 app.post("/tollguru-data", async (req, res) => {
