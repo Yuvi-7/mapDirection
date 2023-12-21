@@ -3,6 +3,7 @@ import { useApiHandler } from "../utils/useApiHandler";
 import { OverPassAbsoluteURL } from "../utils/ConstantUrl";
 import { useLocationContext } from "../context/LocationContext";
 import { toast } from "react-toastify";
+import SearchBar from "./SearchBar";
 
 const Controls = () => {
   const { apiCall } = useApiHandler();
@@ -56,7 +57,7 @@ const Controls = () => {
       </h1>
 
       <div className="flex justify-center">
-        <input
+        {/* <input
           type="text"
           className="p-1 w-[14rem] outline-none"
           value={search}
@@ -67,7 +68,9 @@ const Controls = () => {
           onClick={fetchLocation}
         >
           Search
-        </button>
+        </button> */}
+
+        <SearchBar />
       </div>
       <p className="text-left pl-[2.3rem] pt-1 text-xs text-[#FF0000]">
         amenity only*

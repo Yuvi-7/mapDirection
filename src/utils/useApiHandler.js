@@ -6,9 +6,10 @@ export function useApiHandler() {
     try {
       const response = await axios({
         method,
-        url,
+        url, 
         headers,
         data,
+        withCredentials: false,
       });
 
       if (response.status === 200) {
