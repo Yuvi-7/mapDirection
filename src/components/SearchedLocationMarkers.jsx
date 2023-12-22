@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocationContext } from "../context/LocationContext";
 import { Marker, Popup } from "react-leaflet";
+import { useLeafletContext } from "@react-leaflet/core";
 import { useApiHandler } from "../utils/useApiHandler";
 import { ORMAbsoluteURL, TollAbsoluteURL } from "../utils/ConstantUrl";
 import { decodePolyline } from "../utils/decodePolyline";
@@ -11,6 +12,7 @@ const SearchedLocationMarkers = () => {
   const { locationData, setLocationData, position, setEncodedGeometry } =
     useLocationContext();
   const { apiCall } = useApiHandler();
+  const mapContext = useLeafletContext();
 
   const customIcon = new L.Icon({
     iconUrl: locationMark,
@@ -93,8 +95,27 @@ const SearchedLocationMarkers = () => {
     return (seconds / 60).toFixed(2) + " min";
   }
 
+  console.log(locationData, "ccp");
+
+  const displayMarker = () => {
+    mapContext.map.flyTo(
+      [locationData?.lat, locationData?.lon],
+      mapContext.map.getZoom()
+    );
+    return (
+      <Marker
+        position={[locationData?.lat, locationData?.lon]}
+        icon={customIcon}
+      >
+        <Popup>{locationData?.name}</Popup>
+      </Marker>
+    );
+  };
+
   return (
     <>
+      {Object.keys(locationData)?.length > 0 && displayMarker()}
+      
       {locationData.length > 0 &&
         locationData.map((location) => (
           <Marker
