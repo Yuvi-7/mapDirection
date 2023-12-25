@@ -4,11 +4,11 @@ import { Marker, Popup } from "react-leaflet";
 import { useLocationContext } from "../context/LocationContext";
 import { MdLocationPin } from "react-icons/md";
 import markerIcon from "../assets/icons/location.png";
-import L from "leaflet";
+import L, { latLng } from "leaflet";
 
 const LocationMarker = () => {
   const mapContext = useLeafletContext();
-  const { position, setPosition } = useLocationContext();
+  const { position, setPosition, setDirection } = useLocationContext();
 
   const customIcon = new L.Icon({
     iconUrl: markerIcon,
@@ -20,6 +20,15 @@ const LocationMarker = () => {
   useEffect(() => {
     mapContext.map.locate().on("locationfound", (e) => {
       setPosition(e.latlng);
+      console.log(e,latLng,'pp0')
+      setDirection((prev) => ({
+        ...prev,
+        from: {
+          ...prev.from,
+          lat: e.latlng?.lat,
+          lon: e.latlng?.lng,
+        },
+      }));
       mapContext.map.flyTo(e.latlng, mapContext.map.getZoom());
     });
   }, []);

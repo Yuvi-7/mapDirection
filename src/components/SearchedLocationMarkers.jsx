@@ -9,8 +9,13 @@ import locationMark from "../assets/icons/other_location.png";
 import L from "leaflet";
 
 const SearchedLocationMarkers = () => {
-  const { locationData, setLocationData, position, setEncodedGeometry } =
-    useLocationContext();
+  const {
+    locationData,
+    setLocationData,
+    position,
+    setEncodedGeometry,
+    direction,
+  } = useLocationContext();
   const { apiCall } = useApiHandler();
   const mapContext = useLeafletContext();
 
@@ -20,6 +25,12 @@ const SearchedLocationMarkers = () => {
     iconAnchor: [16, 32], // point of the icon which will correspond to marker's location
     popupAnchor: [0, -32], // point from which the popup should open relative to the iconAnchor
   });
+
+  // useEffect(() => {
+  //   if (direction?.from?.lat.length > 0 && direction?.to?.lon.length > 0) {
+  //     displayDirectionMarker();
+  //   }
+  // }, [direction]);
 
   const caluclateTollNFuel = async (geometry, id) => {
     const data = {
@@ -67,7 +78,8 @@ const SearchedLocationMarkers = () => {
   const getCoordinates = async (lat, lon, id) => {
     const res = await apiCall(
       "get",
-      `${ORMAbsoluteURL}transit/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline`
+      // `${ORMAbsoluteURL}bike/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline`
+      `${ORMAbsoluteURL}/routed-bike/route/v1/driving/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
     );
 
     if (res) {
@@ -112,10 +124,45 @@ const SearchedLocationMarkers = () => {
     );
   };
 
+  const displayDirectionMarker = () => {
+    // mapContext.map.flyTo(
+    //   [locationData?.lat, locationData?.lon],
+    //   mapContext.map.getZoom()
+    // );
+
+    return (
+      <>
+        {position?.lat !== direction?.from?.lat &&
+          position?.lng !== direction?.from?.lon && (
+            <Marker
+              position={[direction?.from?.lat, direction?.from?.lon]}
+              icon={customIcon}
+            >
+              <Popup>{direction?.from?.name}</Popup>
+            </Marker>
+          )}
+
+        <Marker
+          position={[direction?.to?.lat, direction?.to?.lon]}
+          icon={customIcon}
+        >
+          <Popup>{direction?.to?.name}</Popup>
+        </Marker>
+      </>
+    );
+  };
+
+  console.log(direction, "zz0", displayDirectionMarker());
+
   return (
     <>
-      {Object.keys(locationData)?.length > 0 && displayMarker()}
-      
+      {displayDirectionMarker()}
+      {/* {Object.keys(locationData)?.length > 0 &&
+        !direction?.to?.lat &&
+        displayMarker()} */}
+
+      {displayMarker()}
+
       {locationData.length > 0 &&
         locationData.map((location) => (
           <Marker

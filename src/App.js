@@ -9,14 +9,21 @@ function App() {
   return (
     <LocationContextProvider>
       <div className="App">
-        <div className="w-[90%] h-[90%] flex ">
-          <div className="w-[70%] border-r-2">
+        {/* <div className="w-[90%] h-[90%] flex"> */}
+        <div className="w-full h-full">
+          <div className="w-full h-full relative">
+            <Map />
+
+            <Controls />
+          </div>
+
+          {/* <div className="w-[70%] border-r-2">
             <Map />
           </div>
 
           <div className="w-[30%]">
             <Controls />
-          </div>
+          </div> */}
         </div>
       </div>
       <ToastContainer />

@@ -4,6 +4,7 @@ import { OverPassAbsoluteURL } from "../utils/ConstantUrl";
 import { useLocationContext } from "../context/LocationContext";
 import { toast } from "react-toastify";
 import SearchBar from "./SearchBar";
+import Transportation from "./Transportation";
 
 const Controls = () => {
   const { apiCall } = useApiHandler();
@@ -51,10 +52,10 @@ const Controls = () => {
   };
 
   return (
-    <div className="h-[100%] bg-[#F2EFE9] p-3 relative">
-      <h1 className="font-bold text-[1.5rem] mb-3">
-        Toll Calculator Application
-      </h1>
+    <div className="w-[30%] h-[100%]  p-3 z-[999] absolute bottom-0 right-0">
+      {/* <h1 className="font-normal text-[1.3rem] mb-3 text-left">
+        Map Direction
+      </h1>  */} 
 
       <div className="flex justify-center">
         {/* <input
@@ -72,11 +73,11 @@ const Controls = () => {
 
         <SearchBar />
       </div>
-      <p className="text-left pl-[2.3rem] pt-1 text-xs text-[#FF0000]">
-        amenity only*
-      </p>
+      
 
-      <div className=" pt-3">
+      {/* <Transportation /> */}
+
+      {/* <div className=" pt-3">
         <label htmlFor="rangeInput" className="text-sm pr-2">
           Select Area Range:
         </label>
@@ -90,13 +91,9 @@ const Controls = () => {
         />
         <br />
         <strong className="pl-2 text-sm">{range} meters</strong>
-      </div>
+      </div> */}
 
-      <p className="w-[90%] text-xs absolute bottom-0 pb-2">
-        *Might, TollGuru API daily quota has been exceeded in process of
-        devlopment. Please try again tomorrow. (Didn't get the daily quota msg
-        from api)
-      </p>
+   
     </div>
   );
 };

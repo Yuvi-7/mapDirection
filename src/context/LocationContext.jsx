@@ -9,7 +9,12 @@ export const useLocationContext = () => {
 const LocationContextProvider = ({ children }) => {
   const [position, setPosition] = useState(null);
   const [locationData, setLocationData] = useState([]);
+  const [direction, setDirection] = useState({
+    from: { text: "", lat: "", lon: "", name: "" },
+    to: { text: "", lat: "", lon: "", name: "" },
+  });
   const [encodedGeometry, setEncodedGeometry] = useState("");
+  const [mode, setMode] = useState("bike");
 
   return (
     <LocationContextApi.Provider
@@ -20,6 +25,10 @@ const LocationContextProvider = ({ children }) => {
         setPosition,
         encodedGeometry,
         setEncodedGeometry,
+        direction,
+        setDirection,
+        mode,
+        setMode,
       }}
     >
       {children}
