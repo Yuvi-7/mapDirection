@@ -26,7 +26,7 @@ const SearchBar = () => {
   const [toggleSearch, setToggleSearch] = useState(false);
 
   useEffect(() => {
-    if (search.length > 0) {
+    if (direction?.search?.text.length > 0) {
       const timer = setTimeout(() => {
         fetchAddress();
       }, 1000);
@@ -35,7 +35,7 @@ const SearchBar = () => {
         clearTimeout(timer);
       };
     }
-  }, [search]);
+  }, [direction?.search?.text]);
 
   // useEffect(() => {
   //   if (toggleSearch && Object.keys(locationData)?.length > 0) {
@@ -46,12 +46,19 @@ const SearchBar = () => {
   const handleChange = (e) => {
     const { value } = e.target;
     setSearch(value);
+    setDirection((prev) => ({
+      ...prev,
+      search: {
+        ...prev.search,
+        text: value,
+      },
+    }));
   };
 
   const fetchAddress = async () => {
     const res = await apiCall(
       "get",
-      `${SearchAddressURL}?addressdetails=1&q=${search}&format=jsonv2&limit=40`
+      `${SearchAddressURL}?addressdetails=1&q=${direction?.search?.text}&format=jsonv2&limit=40`
     );
 
     if (res) {
@@ -90,6 +97,12 @@ const SearchBar = () => {
   const reset = () => {
     setEncodedGeometry("");
     setSearch("");
+    setDirection((prev) => ({
+      search: {
+        ...prev.search,
+        text: "",
+      },
+    }));
     setLocationData("");
     setModal(false);
   };
@@ -129,7 +142,7 @@ const SearchBar = () => {
         <div className="flex flex-col w-full">
           <div
             className={`w-full h-12 flex items-center justify-between bg-white px-4 appearance-none ${
-              modal && search.length > 0
+              modal && direction?.search?.text?.length > 0
                 ? "rouned-b-0 rounded-t-2xl"
                 : "rounded-b-[30px] rounded-t-[30px]"
             }`}
@@ -137,10 +150,10 @@ const SearchBar = () => {
             <input
               placeholder="Search Address"
               className="w-80 text-gray-800 outline-none"
-              value={search}
+              value={direction?.search?.text}
               onChange={(e) => handleChange(e)}
             />
-            {search.length > 0 && (
+            {direction?.search?.text?.length > 0 && (
               <span>
                 <IoClose size={25} className="cursor-pointer" onClick={reset} />
               </span>
@@ -154,7 +167,7 @@ const SearchBar = () => {
             />
           </div>
 
-          {modal && search.length > 0 && (
+          {modal && direction?.search?.text?.length > 0 && (
             <LocationListModal
               address={address}
               setSearch={setSearch}

@@ -8,11 +8,12 @@ export const useLocationContext = () => {
 
 const LocationContextProvider = ({ children }) => {
   const [position, setPosition] = useState(null);
-  const [locationData, setLocationData] = useState([]);
+  const [locationData, setLocationData] = useState([]); //saket
   const [direction, setDirection] = useState({
+    search: { text: "", lat: "", lon: "", name: "" },
     from: { text: "", lat: "", lon: "", name: "" },
     to: { text: "", lat: "", lon: "", name: "" },
-  });
+  }); // lado sarai
   const [encodedGeometry, setEncodedGeometry] = useState("");
   const [mode, setMode] = useState("bike");
 

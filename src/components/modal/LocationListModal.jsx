@@ -35,6 +35,12 @@ const LocationListModal = ({ address, setSearch, setModal, type }) => {
     setLocationData({ lat, lon, name });
     setDirection((prev) => ({
       ...prev,
+      search: {
+        ...prev.search,
+        lat,
+        lon,
+        name,
+      },
       to: {
         ...prev.to,
         lat,

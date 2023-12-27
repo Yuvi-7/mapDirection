@@ -110,18 +110,58 @@ const SearchedLocationMarkers = () => {
   console.log(locationData, "ccp");
 
   const displayMarker = () => {
-    mapContext.map.flyTo(
-      [locationData?.lat, locationData?.lon],
-      mapContext.map.getZoom()
-    );
-    return (
-      <Marker
-        position={[locationData?.lat, locationData?.lon]}
-        icon={customIcon}
-      >
-        <Popup>{locationData?.name}</Popup>
-      </Marker>
-    );
+    // if (locationData?.lat && locationData?.lon) {
+    //   mapContext.map.flyTo(
+    //     [locationData?.lat, locationData?.lon],
+    //     mapContext.map.getZoom()
+    //   );
+    //   return (
+    //     <Marker
+    //       position={[locationData?.lat, locationData?.lon]}
+    //       icon={customIcon}
+    //     >
+    //       <Popup>{locationData?.name}</Popup>
+    //     </Marker>
+    //   );
+    // }
+
+    console.log(direction.search, "pp0z");
+
+    if (direction?.search?.lat && direction?.search?.lon) {
+      mapContext.map.flyTo(
+        [direction?.search?.lat, direction?.search?.lon],
+        mapContext.map.getZoom()
+      );
+      return (
+        <Marker
+          position={[direction?.search?.lat, direction?.search?.lon]}
+          icon={customIcon}
+        >
+          <Popup>{direction?.search?.name}</Popup>
+        </Marker>
+      );
+    }
+
+    if (
+      position?.lat !== direction?.from?.lat &&
+      position?.lng !== direction?.from?.lon
+    ) {
+      return (
+        <Marker
+          position={[direction?.from?.lat, direction?.from?.lon]}
+          icon={customIcon}
+        >
+          <Popup>{direction?.from?.name}</Popup>
+        </Marker>
+      );
+    }
+
+    <Marker
+      position={[direction?.to?.lat, direction?.to?.lon]}
+      icon={customIcon}
+    >
+      <Popup>{direction?.to?.name}</Popup>
+    </Marker>;
   };
 
   const displayDirectionMarker = () => {
@@ -129,7 +169,7 @@ const SearchedLocationMarkers = () => {
     //   [locationData?.lat, locationData?.lon],
     //   mapContext.map.getZoom()
     // );
-
+    console.log(direction, "dirx");
     return (
       <>
         {position?.lat !== direction?.from?.lat &&
@@ -156,7 +196,7 @@ const SearchedLocationMarkers = () => {
 
   return (
     <>
-      {displayDirectionMarker()}
+      {/* {displayDirectionMarker()} */}
       {/* {Object.keys(locationData)?.length > 0 &&
         !direction?.to?.lat &&
         displayMarker()} */}
