@@ -15,6 +15,7 @@ const SearchedLocationMarkers = () => {
     position,
     setEncodedGeometry,
     direction,
+    type,
   } = useLocationContext();
   const { apiCall } = useApiHandler();
   const mapContext = useLeafletContext();
@@ -107,31 +108,30 @@ const SearchedLocationMarkers = () => {
     return (seconds / 60).toFixed(2) + " min";
   }
 
-  console.log(locationData, "ccp");
-
   const displayMarker = () => {
-    // if (locationData?.lat && locationData?.lon) {
-    //   mapContext.map.flyTo(
-    //     [locationData?.lat, locationData?.lon],
-    //     mapContext.map.getZoom()
-    //   );
-    //   return (
-    //     <Marker
-    //       position={[locationData?.lat, locationData?.lon]}
-    //       icon={customIcon}
-    //     >
-    //       <Popup>{locationData?.name}</Popup>
-    //     </Marker>
-    //   );
-    // }
+    console.log(direction, "ccp", type);
 
-    console.log(direction.search, "pp0z");
-
-    if (direction?.search?.lat && direction?.search?.lon) {
-      mapContext.map.flyTo(
-        [direction?.search?.lat, direction?.search?.lon],
-        mapContext.map.getZoom()
+    if (type === "direction") {
+      return (
+        <>
+          {direction?.from?.lat !== position.lat &&
+            direction?.from?.lon !== position.lon && (
+              <Marker
+                position={[direction?.from?.lat, direction?.from?.lon]}
+                icon={customIcon}
+              >
+                <Popup>{direction?.from?.name}</Popup>
+              </Marker>
+            )}
+          <Marker
+            position={[direction?.to?.lat, direction?.to?.lon]}
+            icon={customIcon}
+          >
+            <Popup>{direction?.to?.name}</Popup>
+          </Marker>
+        </>
       );
+    } else {
       return (
         <Marker
           position={[direction?.search?.lat, direction?.search?.lon]}
@@ -142,26 +142,42 @@ const SearchedLocationMarkers = () => {
       );
     }
 
-    if (
-      position?.lat !== direction?.from?.lat &&
-      position?.lng !== direction?.from?.lon
-    ) {
-      return (
-        <Marker
-          position={[direction?.from?.lat, direction?.from?.lon]}
-          icon={customIcon}
-        >
-          <Popup>{direction?.from?.name}</Popup>
-        </Marker>
-      );
-    }
+    // if (direction?.search?.lat && direction?.search?.lon) {
+    //   mapContext.map.flyTo(
+    //     [direction?.search?.lat, direction?.search?.lon],
+    //     mapContext.map.getZoom()
+    //   );
+    //   return (
+    //     <Marker
+    //       position={[direction?.search?.lat, direction?.search?.lon]}
+    //       icon={customIcon}
+    //     >
+    //       <Popup>{direction?.search?.name}</Popup>
+    //     </Marker>
+    //   );
+    // } else {
+    // }
 
-    <Marker
-      position={[direction?.to?.lat, direction?.to?.lon]}
-      icon={customIcon}
-    >
-      <Popup>{direction?.to?.name}</Popup>
-    </Marker>;
+    // <Marker
+    //   position={[direction?.to?.lat, direction?.to?.lon]}
+    //   icon={customIcon}
+    // >
+    //   <Popup>{direction?.to?.name}</Popup>
+    // </Marker>;
+
+    // if (
+    //   position?.lat !== direction?.from?.lat &&
+    //   position?.lng !== direction?.from?.lon
+    // ) {
+    //   return (
+    //     <Marker
+    //       position={[direction?.from?.lat, direction?.from?.lon]}
+    //       icon={customIcon}
+    //     >
+    //       <Popup>{direction?.from?.name}</Popup>
+    //     </Marker>
+    //   );
+    // }
   };
 
   const displayDirectionMarker = () => {
@@ -196,11 +212,6 @@ const SearchedLocationMarkers = () => {
 
   return (
     <>
-      {/* {displayDirectionMarker()} */}
-      {/* {Object.keys(locationData)?.length > 0 &&
-        !direction?.to?.lat &&
-        displayMarker()} */}
-
       {displayMarker()}
 
       {locationData.length > 0 &&

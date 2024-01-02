@@ -9,7 +9,7 @@ import Transportation from "./Transportation";
 const Controls = () => {
   const { apiCall } = useApiHandler();
   const [search, setSearch] = useState("");
-  const { setLocationData, setEncodedGeometry } = useLocationContext();
+  const {  setEncodedGeometry } = useLocationContext();
   const [range, setRange] = useState(500);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Controls = () => {
       );
 
       if (res) {
-        setLocationData(res?.elements);
+      
         if (res?.elements?.length === 0) {
           toast.warn("Increase Range or Search Amenity Only!");
         }

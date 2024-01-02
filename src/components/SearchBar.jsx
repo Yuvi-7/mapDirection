@@ -13,10 +13,11 @@ const SearchBar = () => {
     locationData,
     position,
     setEncodedGeometry,
-    setLocationData,
+   
     setDirection,
     direction,
     mode,
+    setType,
   } = useLocationContext();
   const [search, setSearch] = useState("");
   // const [address, setAddress] = useState([]);
@@ -103,7 +104,7 @@ const SearchBar = () => {
         text: "",
       },
     }));
-    setLocationData("");
+ 
     setModal(false);
   };
 
@@ -111,7 +112,7 @@ const SearchBar = () => {
 
   const switchDirectionComp = () => {
     console.log(position, "ss9");
-    // setLocationData([]);
+  
     setDirection((prev) => ({
       ...prev,
       from: {
@@ -123,6 +124,7 @@ const SearchBar = () => {
       to: { ...prev.to, text: search },
     }));
     setToggleSearch(true);
+    setType("direction");
     // getEncodedPolyline();
   };
 

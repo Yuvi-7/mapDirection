@@ -19,10 +19,11 @@ const Direction = ({
     locationData,
     position,
     setEncodedGeometry,
-    setLocationData,
+   
     direction,
     setDirection,
     mode,
+    setType
   } = useLocationContext();
   const { apiCall } = useApiHandler();
 

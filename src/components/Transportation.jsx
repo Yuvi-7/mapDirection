@@ -4,8 +4,13 @@ import { IoClose } from "react-icons/io5";
 import { useLocationContext } from "../context/LocationContext";
 
 const Transportation = ({ setToggleSearch }) => {
-  const { setEncodedGeometry, setDirection, setLocationData, setMode } =
-    useLocationContext();
+  const {
+    setEncodedGeometry,
+    setDirection,
+    setLocationData,
+    setMode,
+    setType,
+  } = useLocationContext();
 
   const transport = [
     {
@@ -46,7 +51,9 @@ const Transportation = ({ setToggleSearch }) => {
     setDirection((prev) => ({
       ...prev,
       from: { text: "Your location", lat: "", lon: "", name: "" },
+      to: { ...prev.search },
     }));
+    setType("search");
   };
 
   return (

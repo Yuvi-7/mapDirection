@@ -14,6 +14,7 @@ const LocationContextProvider = ({ children }) => {
     from: { text: "", lat: "", lon: "", name: "" },
     to: { text: "", lat: "", lon: "", name: "" },
   }); // lado sarai
+  const [type, setType] = useState("search");
   const [encodedGeometry, setEncodedGeometry] = useState("");
   const [mode, setMode] = useState("bike");
 
@@ -30,6 +31,8 @@ const LocationContextProvider = ({ children }) => {
         setDirection,
         mode,
         setMode,
+        setType,
+        type,
       }}
     >
       {children}
