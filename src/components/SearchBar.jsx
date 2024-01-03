@@ -13,7 +13,7 @@ const SearchBar = () => {
     locationData,
     position,
     setEncodedGeometry,
-   
+
     setDirection,
     direction,
     mode,
@@ -99,20 +99,17 @@ const SearchBar = () => {
     setEncodedGeometry("");
     setSearch("");
     setDirection((prev) => ({
-      search: {
-        ...prev.search,
-        text: "",
-      },
+      ...prev,
+      search: { text: "", lat: "", lon: "", name: "" },
+      to: { text: "", lat: "", lon: "", name: "" },
     }));
- 
+
     setModal(false);
   };
 
   console.log(modal, "modal");
 
   const switchDirectionComp = () => {
-    console.log(position, "ss9");
-  
     setDirection((prev) => ({
       ...prev,
       from: {
@@ -121,12 +118,15 @@ const SearchBar = () => {
         lat: position?.lat,
         lon: position?.lng,
       },
-      to: { ...prev.to, text: search },
+      to: { ...prev.to, text: direction.search.text },
     }));
+    
     setToggleSearch(true);
     setType("direction");
     // getEncodedPolyline();
   };
+
+  console.log(search, "nnl");
 
   return (
     <>

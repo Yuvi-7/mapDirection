@@ -9,14 +9,8 @@ import locationMark from "../assets/icons/other_location.png";
 import L from "leaflet";
 
 const SearchedLocationMarkers = () => {
-  const {
-    locationData,
-    setLocationData,
-    position,
-    setEncodedGeometry,
-    direction,
-    type,
-  } = useLocationContext();
+  const { position, setEncodedGeometry, direction, type } =
+    useLocationContext();
   const { apiCall } = useApiHandler();
   const mapContext = useLeafletContext();
 
@@ -27,54 +21,48 @@ const SearchedLocationMarkers = () => {
     popupAnchor: [0, -32], // point from which the popup should open relative to the iconAnchor
   });
 
-  // useEffect(() => {
-  //   if (direction?.from?.lat.length > 0 && direction?.to?.lon.length > 0) {
-  //     displayDirectionMarker();
+  // const caluclateTollNFuel = async (geometry, id) => {
+  //   const data = {
+  //     mapProvider: "here",
+  //     polyline: geometry,
+  //     vehicle: {
+  //       type: "2AxlesMotorcycle",
+  //     },
+  //     fuelOptions: {
+  //       fuelCost: {
+  //         units: "INR/liter",
+  //         currency: "INR",
+  //         fuelUnit: "liter",
+  //       },
+  //     },
+  //     units: {
+  //       currency: "INR",
+  //     },
+  //   };
+
+  //   const res = await apiCall(
+  //     "post",
+  //     "/tollguru-data",
+  //     {
+  //       "x-api-key": process.env.REACT_APP_TOLL_API_KEY,
+  //       "Content-Type": "application/json",
+  //       mode: "no-cors",
+  //     },
+  //     data
+  //   );
+
+  //   if (res) {
+  //     const arr = [...locationData];
+
+  //     // setLocationData(
+  //     //   arr.map((location) =>
+  //     //     location.id === id
+  //     //       ? { ...location, route: res?.route, summary: res?.summary }
+  //     //       : location
+  //     //   )
+  //     // );
   //   }
-  // }, [direction]);
-
-  const caluclateTollNFuel = async (geometry, id) => {
-    const data = {
-      mapProvider: "here",
-      polyline: geometry,
-      vehicle: {
-        type: "2AxlesMotorcycle",
-      },
-      fuelOptions: {
-        fuelCost: {
-          units: "INR/liter",
-          currency: "INR",
-          fuelUnit: "liter",
-        },
-      },
-      units: {
-        currency: "INR",
-      },
-    };
-
-    const res = await apiCall(
-      "post",
-      "/tollguru-data",
-      {
-        "x-api-key": process.env.REACT_APP_TOLL_API_KEY,
-        "Content-Type": "application/json",
-        mode: "no-cors",
-      },
-      data
-    );
-
-    if (res) {
-      const arr = [...locationData];
-
-      setLocationData(
-        arr.map((location) =>
-          location.id === id
-            ? { ...location, route: res?.route, summary: res?.summary }
-            : location
-        )
-      );
-    }
-  };
+  // };
 
   const getCoordinates = async (lat, lon, id) => {
     const res = await apiCall(
@@ -85,18 +73,18 @@ const SearchedLocationMarkers = () => {
 
     if (res) {
       setEncodedGeometry(res?.routes?.[0]?.geometry);
-      setLocationData(
-        locationData?.map((location) =>
-          location.id === id
-            ? {
-                ...location,
-                distance: res?.routes?.[0]?.distance,
-                duration: res?.routes?.[0]?.duration,
-              }
-            : location
-        )
-      );
-      caluclateTollNFuel(res?.routes?.[0]?.geometry, id);
+      // setLocationData(
+      //   locationData?.map((location) =>
+      //     location.id === id
+      //       ? {
+      //           ...location,
+      //           distance: res?.routes?.[0]?.distance,
+      //           duration: res?.routes?.[0]?.duration,
+      //         }
+      //       : location
+      //   )
+      // );
+      // caluclateTollNFuel(res?.routes?.[0]?.geometry, id);
     }
   };
 
@@ -109,8 +97,6 @@ const SearchedLocationMarkers = () => {
   }
 
   const displayMarker = () => {
-    console.log(direction, "ccp", type);
-
     if (type === "direction") {
       return (
         <>
@@ -141,80 +127,13 @@ const SearchedLocationMarkers = () => {
         </Marker>
       );
     }
-
-    // if (direction?.search?.lat && direction?.search?.lon) {
-    //   mapContext.map.flyTo(
-    //     [direction?.search?.lat, direction?.search?.lon],
-    //     mapContext.map.getZoom()
-    //   );
-    //   return (
-    //     <Marker
-    //       position={[direction?.search?.lat, direction?.search?.lon]}
-    //       icon={customIcon}
-    //     >
-    //       <Popup>{direction?.search?.name}</Popup>
-    //     </Marker>
-    //   );
-    // } else {
-    // }
-
-    // <Marker
-    //   position={[direction?.to?.lat, direction?.to?.lon]}
-    //   icon={customIcon}
-    // >
-    //   <Popup>{direction?.to?.name}</Popup>
-    // </Marker>;
-
-    // if (
-    //   position?.lat !== direction?.from?.lat &&
-    //   position?.lng !== direction?.from?.lon
-    // ) {
-    //   return (
-    //     <Marker
-    //       position={[direction?.from?.lat, direction?.from?.lon]}
-    //       icon={customIcon}
-    //     >
-    //       <Popup>{direction?.from?.name}</Popup>
-    //     </Marker>
-    //   );
-    // }
   };
-
-  const displayDirectionMarker = () => {
-    // mapContext.map.flyTo(
-    //   [locationData?.lat, locationData?.lon],
-    //   mapContext.map.getZoom()
-    // );
-    console.log(direction, "dirx");
-    return (
-      <>
-        {position?.lat !== direction?.from?.lat &&
-          position?.lng !== direction?.from?.lon && (
-            <Marker
-              position={[direction?.from?.lat, direction?.from?.lon]}
-              icon={customIcon}
-            >
-              <Popup>{direction?.from?.name}</Popup>
-            </Marker>
-          )}
-
-        <Marker
-          position={[direction?.to?.lat, direction?.to?.lon]}
-          icon={customIcon}
-        >
-          <Popup>{direction?.to?.name}</Popup>
-        </Marker>
-      </>
-    );
-  };
-
-  console.log(direction, "zz0", displayDirectionMarker());
 
   return (
     <>
       {displayMarker()}
 
-      {locationData.length > 0 &&
+      {/* {locationData.length > 0 &&
         locationData.map((location) => (
           <Marker
             position={[location?.lat, location?.lon]}
@@ -261,7 +180,7 @@ const SearchedLocationMarkers = () => {
               </div>
             </Popup>
           </Marker>
-        ))}
+        ))} */}
     </>
   );
 };

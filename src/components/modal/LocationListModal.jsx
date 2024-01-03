@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { useLocationContext } from "../../context/LocationContext";
 
-const LocationListModal = ({ address, setSearch, setModal, type }) => {
-  const { setLocationData, setEncodedGeometry, setDirection } =
-    useLocationContext();
+const LocationListModal = ({ address, setModal }) => {
+  const { setDirection } = useLocationContext();
 
   useEffect(() => {
     if (address?.addrList?.length > 0) {
@@ -12,40 +11,17 @@ const LocationListModal = ({ address, setSearch, setModal, type }) => {
     }
   }, [address]);
 
-  const setLocationFunc = (lat, lon, name) => {
+  const setLocationFunc = (lat, lon, name, fullName) => {
     setModal(false);
-    setEncodedGeometry("");
 
-    if (type === "direction") {
-      // setLocationData([]);
-
-      setDirection((prev) => ({
-        ...prev,
-        [address?.type]: {
-          ...prev[address.type],
-          lat,
-          lon,
-          name,
-        },
-      }));
-
-      return;
-    }
-
-    setLocationData({ lat, lon, name });
     setDirection((prev) => ({
       ...prev,
-      search: {
-        ...prev.search,
+      [address?.type]: {
+        ...prev[address.type],
         lat,
         lon,
         name,
-      },
-      to: {
-        ...prev.to,
-        lat,
-        lon,
-        name,
+        text: fullName,
       },
     }));
   };
@@ -58,7 +34,14 @@ const LocationListModal = ({ address, setSearch, setModal, type }) => {
           <div
             className="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100 px-2 py-3 "
             key={adrs?.place_id}
-            onClick={() => setLocationFunc(adrs?.lat, adrs?.lon, adrs?.name)}
+            onClick={() =>
+              setLocationFunc(
+                adrs?.lat,
+                adrs?.lon,
+                adrs?.name,
+                adrs?.display_name
+              )
+            }
           >
             <div className="flex items-center justify-between">
               <span className="basis-[13%]">

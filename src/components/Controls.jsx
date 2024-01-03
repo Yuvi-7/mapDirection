@@ -8,42 +8,42 @@ import Transportation from "./Transportation";
 
 const Controls = () => {
   const { apiCall } = useApiHandler();
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const {  setEncodedGeometry } = useLocationContext();
   const [range, setRange] = useState(500);
 
-  useEffect(() => {
-    if (search) {
-      const time = setTimeout(() => {
-        fetchLocation();
-      }, 2000);
+  // useEffect(() => {
+  //   if (search) {
+  //     const time = setTimeout(() => {
+  //       fetchLocation();
+  //     }, 2000);
 
-      return () => {
-        clearTimeout(time);
-      };
-    }
-  }, [range]);
+  //     return () => {
+  //       clearTimeout(time);
+  //     };
+  //   }
+  // }, [range]);
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setSearch(value);
-  };
+  // const handleChange = (e) => {
+  //   const { value } = e.target;
+  //   setSearch(value);
+  // };
 
   const fetchLocation = async () => {
-    if (search) {
-      setEncodedGeometry("");
-      const res = await apiCall(
-        "get",
-        `${OverPassAbsoluteURL}?data=[out:json];node["amenity"=${search.toLowerCase()}](around:${range},28.524620,77.186480);out;\n`
-      );
+    // if (search) {
+    //   setEncodedGeometry("");
+    //   const res = await apiCall(
+    //     "get",
+    //     `${OverPassAbsoluteURL}?data=[out:json];node["amenity"=${search.toLowerCase()}](around:${range},28.524620,77.186480);out;\n`
+    //   );
 
-      if (res) {
+    //   if (res) {
       
-        if (res?.elements?.length === 0) {
-          toast.warn("Increase Range or Search Amenity Only!");
-        }
-      }
-    }
+    //     if (res?.elements?.length === 0) {
+    //       toast.warn("Increase Range or Search Amenity Only!");
+    //     }
+    //   }
+    // }
   };
 
   const handleRange = (e) => {
