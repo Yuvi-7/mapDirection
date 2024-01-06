@@ -1,23 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { useLocationContext } from "../../context/LocationContext";
 
-const LocationListModal = ({ address, setModal }) => {
-  const { setDirection } = useLocationContext();
-
-  useEffect(() => {
-    if (address?.addrList?.length > 0) {
-      setModal(true);
-    }
-  }, [address]);
+const LocationListModal = ({
+  searchList,
+  setSearchList,
+  setIsUserInteraction,
+}) => {
+  const { setDirection, type } = useLocationContext();
 
   const setLocationFunc = (lat, lon, name, fullName) => {
-    setModal(false);
-
+    setSearchList({ addrList: [] });
+    setIsUserInteraction(false);
     setDirection((prev) => ({
       ...prev,
-      [address?.type]: {
-        ...prev[address.type],
+      [type]: {
+        ...prev[type],
         lat,
         lon,
         name,
@@ -30,7 +28,7 @@ const LocationListModal = ({ address, setModal }) => {
     <div className="shadow bg-white z-40 w-full max-h-[20rem] max-h-select overflow-y-auto rounded-b-2xl">
       <hr />
       <div className="flex flex-col w-full">
-        {address?.addrList?.map((adrs) => (
+        {searchList?.addrList?.map((adrs) => (
           <div
             className="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100 px-2 py-3 "
             key={adrs?.place_id}
@@ -47,9 +45,9 @@ const LocationListModal = ({ address, setModal }) => {
               <span className="basis-[13%]">
                 <MdOutlineLocationOn size={22} />
               </span>
-              <address className="basis-[87%] text-left text-sm overflow-hidden text-ellipsis whitespace-nowrap">
+              <searchList className="basis-[87%] text-left text-sm overflow-hidden text-ellipsis whitespace-nowrap">
                 {adrs?.display_name}
-              </address>
+              </searchList>
             </div>
           </div>
         ))}

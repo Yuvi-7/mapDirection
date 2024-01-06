@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import LocationMarker from "./LocationMarker";
-import SearchedLocationMarkers from "./SearchedLocationMarkers";
+import React from "react";
+import { MapContainer, TileLayer } from "react-leaflet";
+import LocationMarker from "./marker/LocationMarker";
+import SearchedLocationMarkers from "./marker/SearchedLocationMarkers";
 import { useLocationContext } from "../context/LocationContext";
 import Polyline_ from "./Polyline_";
+import FindMyLocation from "./FindMyLocation";
 
 const Map = () => {
   const { position } = useLocationContext();
@@ -21,9 +22,9 @@ const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+        <FindMyLocation />
         <LocationMarker />
         <SearchedLocationMarkers />
-
         <Polyline_ />
       </MapContainer>
     </div>

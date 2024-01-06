@@ -1,10 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
+import markerIcon from "../../assets/icons/location.png";
 import { useLeafletContext } from "@react-leaflet/core";
 import { Marker, Popup } from "react-leaflet";
-import { useLocationContext } from "../context/LocationContext";
-import { MdLocationPin } from "react-icons/md";
-import markerIcon from "../assets/icons/location.png";
-import L, { latLng } from "leaflet";
+import { useLocationContext } from "../../context/LocationContext";
+import L from "leaflet";
 
 const LocationMarker = () => {
   const mapContext = useLeafletContext();
@@ -20,7 +19,7 @@ const LocationMarker = () => {
   useEffect(() => {
     mapContext.map.locate().on("locationfound", (e) => {
       setPosition(e.latlng);
-      console.log(e,latLng,'pp0')
+
       setDirection((prev) => ({
         ...prev,
         from: {

@@ -1,41 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { FaDirections } from "react-icons/fa";
-import LocationListModal from "./modal/LocationListModal";
-import Transportation from "./Transportation";
-import { useLocationContext } from "../context/LocationContext";
-import { useApiHandler } from "../utils/useApiHandler";
-import { ORMAbsoluteURL, SearchAddressURL } from "../utils/ConstantUrl";
+import React, { useEffect } from "react";
+import Transportation from "../Transportation";
+import { useLocationContext } from "../../context/LocationContext";
+import { useApiHandler } from "../../utils/useApiHandler";
+import { ORMAbsoluteURL, SearchAddressURL } from "../../utils/ConstantUrl";
 
 const Direction = ({
-  //   address,
-  setSearch,
-  //   handleChange,
-  search,
-  modal,
-  setModal,
-  setToggleSearch,
+  isUserInteraction,
+  setIsUserInteraction,
+  setSearchList,
 }) => {
-  const {
-    locationData,
-    position,
-    setEncodedGeometry,
-   
-    direction,
-    setDirection,
-    mode,
-    setType
-  } = useLocationContext();
+  const { setEncodedGeometry, direction, setDirection, mode, setType } =
+    useLocationContext();
   const { apiCall } = useApiHandler();
 
-  //   const [direction, setDirection] = useState({ from: "", to: "" });
-  const [address, setAddress] = useState({ addrList: [], type: "" });
-
-  console.log(direction, setDirection, "cco");
-
   useEffect(() => {
-    const fetchAddressWithTimer = (address, type) => {
+    const fetchAddressWithTimer = (searchList, type) => {
       const timer = setTimeout(() => {
-        fetchAddress(address, type);
+        fetchAddress(searchList, type);
       }, 1000);
 
       return () => {
@@ -43,15 +24,15 @@ const Direction = ({
       };
     };
 
-    if (direction.from.text !== "Your location") {
+    if (direction.from.text !== "Your location" && isUserInteraction) {
       return fetchAddressWithTimer(direction.from.text, "from");
     }
-  }, [direction.from.text]);
+  }, [direction.from.text, isUserInteraction]);
 
   useEffect(() => {
-    const fetchAddressWithTimer = (address, type) => {
+    const fetchAddressWithTimer = (searchList, type) => {
       const timer = setTimeout(() => {
-        fetchAddress(address, type);
+        fetchAddress(searchList, type);
       }, 1000);
 
       return () => {
@@ -59,13 +40,12 @@ const Direction = ({
       };
     };
 
-    if (direction.to.text !== "") {
+    if (direction.to.text !== "" && isUserInteraction) {
       return fetchAddressWithTimer(direction.to.text, "to");
     }
-  }, [direction.to.text]);
+  }, [direction.to.text, isUserInteraction]);
 
   useEffect(() => {
-    console.log("first", direction);
     if (direction?.from?.lat && direction?.to?.lon) {
       getEncodedPolyline();
     }
@@ -78,19 +58,17 @@ const Direction = ({
     );
 
     if (res) {
-      setAddress((prev) => ({
+      setSearchList((prev) => ({
         ...prev,
         addrList: res,
-        type: type,
       }));
-      setModal(true);
+      setType(type);
     }
   };
 
   const getEncodedPolyline = async () => {
     const res = await apiCall(
       "get",
-      // `${ORMAbsoluteURL}transit/${direction?.from?.lon},${direction?.from?.lat};${direction?.to?.lon},${direction?.to?.lat}?overview=full&geometries=polyline`
       `${ORMAbsoluteURL}/routed-${mode}/route/v1/driving/${direction?.from?.lon},${direction?.from?.lat};${direction?.to?.lon},${direction?.to?.lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
     );
 
@@ -101,6 +79,8 @@ const Direction = ({
 
   const handleChange = (e) => {
     const { value, name } = e.target;
+    setIsUserInteraction(true);
+
     setDirection((prev) => ({
       ...prev,
       [name]: {
@@ -110,12 +90,10 @@ const Direction = ({
     }));
   };
 
-  console.log(direction, "direction", modal);
-
   return (
     <div className="flex flex-col w-full ">
       <div className="flex flex-col items-center justify-between w-full bg-white p-3 rounded-md">
-        <Transportation setToggleSearch={setToggleSearch} />
+        <Transportation />
         <input
           placeholder="Choose starting point"
           className="w-full h-10 border-2 text-gray-800 mb-1 outline-none rounded-md bg-white px-4 appearance-none"
@@ -132,15 +110,6 @@ const Direction = ({
           onChange={(e) => handleChange(e)}
         />
       </div>
-
-      {modal && (
-        <LocationListModal
-          address={address}
-          setSearch={setSearch}
-          setModal={setModal}
-          type="direction"
-        />
-      )}
     </div>
   );
 };

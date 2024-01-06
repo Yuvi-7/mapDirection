@@ -18,21 +18,21 @@ const LocationContextProvider = ({ children }) => {
   const [type, setType] = useState("search");
   const [mode, setMode] = useState("bike");
 
+  const contextValue = {
+    position,
+    setPosition,
+    encodedGeometry,
+    setEncodedGeometry,
+    direction,
+    setDirection,
+    mode,
+    setMode,
+    setType,
+    type,
+  };
+
   return (
-    <LocationContextApi.Provider
-      value={{
-        position,
-        setPosition,
-        encodedGeometry,
-        setEncodedGeometry,
-        direction,
-        setDirection,
-        mode,
-        setMode,
-        setType,
-        type,
-      }}
-    >
+    <LocationContextApi.Provider value={contextValue}>
       {children}
     </LocationContextApi.Provider>
   );

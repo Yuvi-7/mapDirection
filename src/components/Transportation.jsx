@@ -1,10 +1,10 @@
 import React from "react";
-import { FaMotorcycle, FaCar, FaBus, FaWalking } from "react-icons/fa";
+import { FaMotorcycle, FaCar, FaWalking } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useLocationContext } from "../context/LocationContext";
 
-const Transportation = ({ setToggleSearch }) => {
-  const { setEncodedGeometry, setDirection, setMode, setType } =
+const Transportation = () => {
+  const { setEncodedGeometry, setDirection, setMode, setType, mode } =
     useLocationContext();
 
   const transport = [
@@ -29,7 +29,6 @@ const Transportation = ({ setToggleSearch }) => {
   ];
 
   const reset = () => {
-    setToggleSearch(false);
     setEncodedGeometry("");
 
     setDirection((prev) => ({
@@ -45,7 +44,9 @@ const Transportation = ({ setToggleSearch }) => {
       <div className="w-[45%] flex justify-around">
         {transport.map((trans) => (
           <span
-            className="w-9 h-9 cursor-pointer text-gray-600 rounded-full transition duration-100 hover:bg-[#F5F5F5] p-2 flex items-center justify-center"
+            className={`w-9 h-9 cursor-pointer text-gray-600 rounded-full transition duration-100 hover:bg-[#F5F5F5] p-2 flex items-center justify-center ${
+              mode === trans?.medium ? "bg-[#F5F5F5]" : "bg-transparent"
+            }`}
             key={trans.id}
             onClick={() => setMode(trans.medium)}
           >

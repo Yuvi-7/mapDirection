@@ -1,18 +1,16 @@
 import React from "react";
-import { useLocationContext } from "../context/LocationContext";
+import locationMark from "../../assets/icons/other_location.png";
+import { useLocationContext } from "../../context/LocationContext";
 import { Marker, Popup } from "react-leaflet";
-import { useLeafletContext } from "@react-leaflet/core";
-import { useApiHandler } from "../utils/useApiHandler";
-import { ORMAbsoluteURL, TollAbsoluteURL } from "../utils/ConstantUrl";
-import { decodePolyline } from "../utils/decodePolyline";
-import locationMark from "../assets/icons/other_location.png";
+import { useApiHandler } from "../../utils/useApiHandler";
+import { ORMAbsoluteURL } from "../../utils/ConstantUrl";
+import { decodePolyline } from "../../utils/decodePolyline";
 import L from "leaflet";
 
 const SearchedLocationMarkers = () => {
   const { position, setEncodedGeometry, direction, type } =
     useLocationContext();
   const { apiCall } = useApiHandler();
-  const mapContext = useLeafletContext();
 
   const customIcon = new L.Icon({
     iconUrl: locationMark,
@@ -21,53 +19,9 @@ const SearchedLocationMarkers = () => {
     popupAnchor: [0, -32], // point from which the popup should open relative to the iconAnchor
   });
 
-  // const caluclateTollNFuel = async (geometry, id) => {
-  //   const data = {
-  //     mapProvider: "here",
-  //     polyline: geometry,
-  //     vehicle: {
-  //       type: "2AxlesMotorcycle",
-  //     },
-  //     fuelOptions: {
-  //       fuelCost: {
-  //         units: "INR/liter",
-  //         currency: "INR",
-  //         fuelUnit: "liter",
-  //       },
-  //     },
-  //     units: {
-  //       currency: "INR",
-  //     },
-  //   };
-
-  //   const res = await apiCall(
-  //     "post",
-  //     "/tollguru-data",
-  //     {
-  //       "x-api-key": process.env.REACT_APP_TOLL_API_KEY,
-  //       "Content-Type": "application/json",
-  //       mode: "no-cors",
-  //     },
-  //     data
-  //   );
-
-  //   if (res) {
-  //     const arr = [...locationData];
-
-  //     // setLocationData(
-  //     //   arr.map((location) =>
-  //     //     location.id === id
-  //     //       ? { ...location, route: res?.route, summary: res?.summary }
-  //     //       : location
-  //     //   )
-  //     // );
-  //   }
-  // };
-
   const getCoordinates = async (lat, lon, id) => {
     const res = await apiCall(
       "get",
-      // `${ORMAbsoluteURL}bike/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline`
       `${ORMAbsoluteURL}/routed-bike/route/v1/driving/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
     );
 
@@ -84,7 +38,6 @@ const SearchedLocationMarkers = () => {
       //       : location
       //   )
       // );
-      // caluclateTollNFuel(res?.routes?.[0]?.geometry, id);
     }
   };
 
@@ -97,7 +50,7 @@ const SearchedLocationMarkers = () => {
   }
 
   const displayMarker = () => {
-    if (type === "direction") {
+    if (type !== "search") {
       return (
         <>
           {direction?.from?.lat !== position.lat &&
