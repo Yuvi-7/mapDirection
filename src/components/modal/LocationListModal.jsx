@@ -45,9 +45,9 @@ const LocationListModal = ({
               <span className="basis-[13%]">
                 <MdOutlineLocationOn size={22} />
               </span>
-              <searchList className="basis-[87%] text-left text-sm overflow-hidden text-ellipsis whitespace-nowrap">
+              <span className="basis-[87%] text-left text-sm overflow-hidden text-ellipsis whitespace-nowrap">
                 {adrs?.display_name}
-              </searchList>
+              </span>
             </div>
           </div>
         ))}

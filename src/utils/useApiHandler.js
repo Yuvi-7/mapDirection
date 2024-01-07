@@ -6,7 +6,7 @@ export function useApiHandler() {
     try {
       const response = await axios({
         method,
-        url, 
+        url,
         headers,
         data,
         withCredentials: false,
@@ -16,7 +16,9 @@ export function useApiHandler() {
         return response?.data;
       }
     } catch (error) {
-      toast.error("Something Went Wrong!");
+      if (error?.response?.data?.message?.length > 0) {
+        toast.warn(error?.response?.data?.message);
+      } else toast.error("Something Went Wrong!");
     }
   };
 
