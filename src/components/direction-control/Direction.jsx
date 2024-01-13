@@ -69,7 +69,7 @@ const Direction = ({
   const getEncodedPolyline = async () => {
     const res = await apiCall(
       "get",
-      `${ORMAbsoluteURL}/routed-${mode}/route/v1/driving/${direction?.from?.lon},${direction?.from?.lat};${direction?.to?.lon},${direction?.to?.lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
+      `${ORMAbsoluteURL}routed-${mode}/route/v1/driving/${direction?.from?.lon},${direction?.from?.lat};${direction?.to?.lon},${direction?.to?.lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
     );
 
     if (res) {
@@ -93,7 +93,7 @@ const Direction = ({
   return (
     <div className="flex flex-col w-full ">
       <div className="flex flex-col items-center justify-between w-full bg-white p-3 rounded-md">
-        <Transportation />
+        <Transportation setSearchList={setSearchList} />
         <input
           placeholder="Choose starting point"
           className="w-full h-10 border-2 text-gray-800 mb-1 outline-none rounded-md bg-white px-4 appearance-none"

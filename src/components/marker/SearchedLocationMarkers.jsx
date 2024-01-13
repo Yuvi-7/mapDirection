@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import locationMark from "../../assets/icons/other_location.png";
+import { useLeafletContext } from "@react-leaflet/core";
 import { useLocationContext } from "../../context/LocationContext";
 import { Marker, Popup } from "react-leaflet";
 import { useApiHandler } from "../../utils/useApiHandler";
@@ -10,6 +11,7 @@ import L from "leaflet";
 const SearchedLocationMarkers = () => {
   const { position, setEncodedGeometry, direction, type } =
     useLocationContext();
+  const mapContext = useLeafletContext();
   const { apiCall } = useApiHandler();
 
   const customIcon = new L.Icon({
@@ -19,10 +21,33 @@ const SearchedLocationMarkers = () => {
     popupAnchor: [0, -32], // point from which the popup should open relative to the iconAnchor
   });
 
+  useEffect(() => {
+    if (type === "search") {
+      if (direction?.search?.lat && direction?.search?.lon) {
+        mapContext.map.flyTo(
+          [direction?.search?.lat, direction?.search?.lon],
+          13
+        );
+      } else if (position) {
+        mapContext.map.flyTo([position?.lat, position?.lng], 13);
+      }
+      return;
+    }
+
+    if (
+      direction?.from?.lat &&
+      direction?.from?.lon &&
+      direction?.to?.lat &&
+      direction?.to?.lon
+    ) {
+      mapContext.map.flyTo([direction?.to?.lat, direction?.to?.lon], 13);
+    }
+  }, [type, direction]);
+
   const getCoordinates = async (lat, lon, id) => {
     const res = await apiCall(
       "get",
-      `${ORMAbsoluteURL}/routed-bike/route/v1/driving/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
+      `${ORMAbsoluteURL}routed-bike/route/v1/driving/${position?.lng},${position?.lat};${lon},${lat}?overview=full&geometries=polyline&alternatives=true&steps=true`
     );
 
     if (res) {

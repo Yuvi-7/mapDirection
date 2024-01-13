@@ -13,7 +13,11 @@ export function useApiHandler() {
       });
 
       if (response.status === 200) {
-        return response?.data;
+        if (response?.data?.length === 0) {
+          toast.warn("No such location found!");
+        } else {
+          return response?.data;
+        }
       }
     } catch (error) {
       if (error?.response?.data?.message?.length > 0) {

@@ -7,7 +7,7 @@ const LocationListModal = ({
   setSearchList,
   setIsUserInteraction,
 }) => {
-  const { setDirection, type } = useLocationContext();
+  const { setDirection, type, direction } = useLocationContext();
 
   const setLocationFunc = (lat, lon, name, fullName) => {
     setSearchList({ addrList: [] });

@@ -25,6 +25,13 @@ const SearchBar = ({
         clearTimeout(timer);
       };
     }
+
+    if (direction?.search?.text?.length === 0) {
+      setSearchList((prev) => ({
+        ...prev,
+        addrList: [],
+      }));
+    }
   }, [direction?.search?.text, isUserInteraction]);
 
   const handleChange = (e) => {
@@ -79,6 +86,11 @@ const SearchBar = ({
       ...prev,
       search: { text: "", lat: "", lon: "", name: "" },
       to: { text: "", lat: "", lon: "", name: "" },
+    }));
+
+    setSearchList((prev) => ({
+      ...prev,
+      addrList: [],
     }));
   };
 

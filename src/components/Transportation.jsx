@@ -3,7 +3,7 @@ import { FaMotorcycle, FaCar, FaWalking } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useLocationContext } from "../context/LocationContext";
 
-const Transportation = () => {
+const Transportation = ({ setSearchList }) => {
   const { setEncodedGeometry, setDirection, setMode, setType, mode } =
     useLocationContext();
 
@@ -30,13 +30,18 @@ const Transportation = () => {
 
   const reset = () => {
     setEncodedGeometry("");
+    setType("search");
 
     setDirection((prev) => ({
       ...prev,
       from: { text: "Your location", lat: "", lon: "", name: "" },
       to: { ...prev.search },
     }));
-    setType("search");
+
+    setSearchList((prev) => ({
+      ...prev,
+      addrList: [],
+    }));
   };
 
   return (
